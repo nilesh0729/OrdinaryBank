@@ -9,7 +9,7 @@ import (
 	"github.com/stretchr/testify/require"
 )
 
-func CreateRandomTransfers(t *testing.T, account1 , account2 Account)Transfer {
+func CreateRandomTransfers(t *testing.T, account1, account2 Account)Transfer {
 	arg := CreateTransfersParams{
 		FromAccountID: account1.ID,
 		ToAccountID: account2.ID,
@@ -42,7 +42,7 @@ func TestGetTransfers(t *testing.T){
 	account1 := CreateRandomAccount(t)
 	account2 := CreateRandomAccount(t)
 
-	Transfer1 := CreateRandomTransfers(t, account1 , account2)
+	Transfer1 := CreateRandomTransfers(t, account1, account2)
 	
 	Transfer2, err := testQueries.GetTransfers(context.Background(), Transfer1.ID)
 
