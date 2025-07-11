@@ -9,6 +9,31 @@ import (
 	"context"
 )
 
+const addBalance = `-- name: AddBalance :one
+UPDATE accounts
+set balance = balance + $2
+WHERE id = $1
+RETURNING id, owner, balance, currency, created_at
+`
+
+type AddBalanceParams struct {
+	ID      int64
+	Balance int64
+}
+
+func (q *Queries) AddBalance(ctx context.Context, arg AddBalanceParams) (Account, error) {
+	row := q.db.QueryRowContext(ctx, addBalance, arg.ID, arg.Balance)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Balance,
+		&i.Currency,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const createAccounts = `-- name: CreateAccounts :one
 INSERT INTO accounts (
   owner,
@@ -68,6 +93,26 @@ func (q *Queries) GetAccounts(ctx context.Context, id int64) (Account, error) {
 	return i, err
 }
 
+const getAccountsForUpdate = `-- name: GetAccountsForUpdate :one
+SELECT id, owner, balance, currency, created_at FROM accounts
+WHERE id = $1 
+LIMIT 1
+FOR NO KEY UPDATE
+`
+
+func (q *Queries) GetAccountsForUpdate(ctx context.Context, id int64) (Account, error) {
+	row := q.db.QueryRowContext(ctx, getAccountsForUpdate, id)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Balance,
+		&i.Currency,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
 const listAccounts = `-- name: ListAccounts :many
 SELECT id, owner, balance, currency, created_at FROM accounts
 WHERE owner = $1
@@ -111,10 +156,11 @@ func (q *Queries) ListAccounts(ctx context.Context, arg ListAccountsParams) ([]A
 	return items, nil
 }
 
-const updateAccounts = `-- name: UpdateAccounts :exec
+const updateAccounts = `-- name: UpdateAccounts :one
 UPDATE accounts
 set balance = $2
 WHERE id = $1
+RETURNING id, owner, balance, currency, created_at
 `
 
 type UpdateAccountsParams struct {
@@ -122,7 +168,15 @@ type UpdateAccountsParams struct {
 	Balance int64
 }
 
-func (q *Queries) UpdateAccounts(ctx context.Context, arg UpdateAccountsParams) error {
-	_, err := q.db.ExecContext(ctx, updateAccounts, arg.ID, arg.Balance)
-	return err
+func (q *Queries) UpdateAccounts(ctx context.Context, arg UpdateAccountsParams) (Account, error) {
+	row := q.db.QueryRowContext(ctx, updateAccounts, arg.ID, arg.Balance)
+	var i Account
+	err := row.Scan(
+		&i.ID,
+		&i.Owner,
+		&i.Balance,
+		&i.Currency,
+		&i.CreatedAt,
+	)
+	return i, err
 }

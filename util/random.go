@@ -32,7 +32,7 @@ func RandomOwner()string{
 
 // Generate a Random Balance
 func RandomBalance()int64{
-	return RandomInt(0,9000000)
+	return RandomInt(0,1000)
 }
 
 //Generate a Random Currency
