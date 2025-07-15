@@ -50,7 +50,7 @@ jobs:
         which migrate
 
     - name: Run Migration
-      run: make Migrateup
+      run: make MigrateUp
 
       
     - name: test
