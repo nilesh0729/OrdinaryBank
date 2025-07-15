@@ -174,8 +174,7 @@ func TestTransactionDeadlock(t *testing.T) {
 		require.NoError(t, err)
 	}
 
-	//All the indivudual check are done 
-	// Now let's check the final updated Accounts
+	
 
 	UpdatedAccount1, err := testQueries.GetAccounts(context.Background(),account1.ID)
 	require.NoError(t, err)
