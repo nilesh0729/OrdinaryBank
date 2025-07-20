@@ -5,6 +5,6 @@ sql:
     schema: "./db/migration"
     gen:
       go:
-        package: "main"
-        out: "Result"
+        package: "Anuskh"
+        out: "./db/Result"
         emit_json_tags: true

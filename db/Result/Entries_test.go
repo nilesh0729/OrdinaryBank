@@ -1,11 +1,11 @@
-package main
+package Anuskh
 
 import (
 	"context"
-	"learning/util"
 	"testing"
 	"time"
 
+	"github.com/nilesh0729/OrdinaryBank/util"
 	"github.com/stretchr/testify/require"
 )
 
@@ -50,27 +50,27 @@ func TestGetEntries(t *testing.T) {
 	require.WithinDuration(t, entry1.CreatedAt, entry2.CreatedAt, time.Second)
 }
 
-func TestListEntries(t *testing.T){
+func TestListEntries(t *testing.T) {
 	account := CreateRandomAccount(t)
-	
-	for i:=0 ; i<10; i++ {
+
+	for i := 0; i < 10; i++ {
 		CreateRandomEntries(t, account)
 	}
 
 	arg := ListEntriesParams{
 		AccountID: account.ID,
-		Offset: 5,
-		Limit: 5,
+		Offset:    5,
+		Limit:     5,
 	}
 
 	Entries, err := testQueries.ListEntries(context.Background(), arg)
 
-	require.NoError(t,err)
+	require.NoError(t, err)
 	require.NotEmpty(t, Entries)
 
 	require.Len(t, Entries, 5)
 
-	for _, entry := range Entries{
+	for _, entry := range Entries {
 		require.NoError(t, err)
 		require.Equal(t, arg.AccountID, entry.AccountID)
 	}

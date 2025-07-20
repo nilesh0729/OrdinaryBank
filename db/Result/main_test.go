@@ -1,4 +1,4 @@
-package main
+package Anuskh
 
 import (
 	"database/sql"

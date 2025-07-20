@@ -3,7 +3,7 @@
 //   sqlc v1.29.0
 // source: Entries.sql
 
-package main
+package Anuskh
 
 import (
 	"context"
