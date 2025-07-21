@@ -19,4 +19,7 @@ Sqlc:
 Test:
 	go test -v -cover ./...
 
-.PHONY:	Container	Createdb	Dropdb	MigrateDown	MigrateUp	Sqlc	Test
+Server:
+	go run main.go
+
+.PHONY:	Container	Createdb	Dropdb	MigrateDown	MigrateUp	Sqlc	Test	Server
