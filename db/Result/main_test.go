@@ -7,19 +7,25 @@ import (
 	"testing"
 
 	_ "github.com/lib/pq"
+	"github.com/nilesh0729/OrdinaryBank/util"
 )
 
 var testQueries *Queries
 var TestDb *sql.DB
 
-const (
-	dbDriver = "postgres"
-	dbSource = "postgres://root:SituBen@localhost:5433/Hiten?sslmode=disable"
-)
+
 
 func TestMain(m *testing.M) {
 	var err error
-	TestDb, err = sql.Open(dbDriver, dbSource)
+
+	config, err := util.LoadConfig("../..")
+    if err != nil {
+		log.Fatal("Can't Load Config: ", err)
+	}
+		
+
+
+	TestDb, err = sql.Open(config.DBDriver, config.DBSource)
 	if err != nil {
 		log.Fatal("Can't connect to Database:", err)
 	}
