@@ -81,7 +81,7 @@ func (server *Server) ListAccount(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return
 	}
-
+	
 	arg := Anuskh.ListAccountsParams{
 		Limit: (req.PageSize),
 		Offset: (req.PageID - 1)* req.PageSize ,
