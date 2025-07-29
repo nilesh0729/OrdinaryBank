@@ -22,4 +22,7 @@ Test:
 Server:
 	go run main.go
 
-.PHONY:	Container	Createdb	Dropdb	MigrateDown	MigrateUp	Sqlc	Test	Server
+Mock:
+	mockgen -package mockDB -destination db/Mock/Store.go github.com/nilesh0729/OrdinaryBank/db/Result Store
+
+.PHONY:	Container	Createdb	Dropdb	MigrateDown	MigrateUp	Sqlc	Test	Server	Mock
