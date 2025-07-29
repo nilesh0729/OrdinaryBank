@@ -6,11 +6,11 @@ import (
 )
 
 type Server struct {
-	store  *Anuskh.Store
+	store  Anuskh.Store
 	router *gin.Engine
 }
 
-func NewServer(store *Anuskh.Store) *Server {
+func NewServer(store Anuskh.Store) *Server {
 	server := &Server{store: store}
 	router := gin.Default()
 
