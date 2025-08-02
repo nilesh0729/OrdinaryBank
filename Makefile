@@ -2,10 +2,10 @@ Container:
 	docker run --name jansi -p 5433:5432 -e POSTGRES_PASSWORD=SituBen -e POSTGRES_USER=root -d postgres
 
 Createdb:
-	docker exec -it nilesh createdb --username=root --owner=root Hiten
+	docker exec -it jansi createdb --username=root --owner=root Hiten
 
 Dropdb:
-	docker exec -it nilesh dropdb Hiten
+	docker exec -it jansi dropdb -U root Hiten
 
 MigrateUp:
 	migrate -path db/migration -database "postgres://root:SituBen@localhost:5433/Hiten?sslmode=disable" -verbose up
