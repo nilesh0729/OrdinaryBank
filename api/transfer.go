@@ -14,7 +14,7 @@ type TransferRequest struct {
 	FromAccountId int64  `json:"from_account_id" binding:"required,min=1"`
 	ToAccountId   int64  `json:"to_account_id" binding:"required,min=1"`
 	Amount        int64  `json:"amount" binding:"required,gt=0"` //gt == greater than(used in case the amount would be less than 1 but still greater than 0, like Rs0.45)
-	Currency      string `json:"currency" binding:"required,oneof=INR USD CAD EUR YEN"`
+	Currency      string `json:"currency" binding:"required,currency"`
 }
 
 func (server *Server) CreateTransfer(ctx *gin.Context) {
@@ -26,19 +26,18 @@ func (server *Server) CreateTransfer(ctx *gin.Context) {
 		return
 	}
 
-	if !server.AccountValidator(ctx,req.FromAccountId,req.Currency){
+	if !server.AccountValidator(ctx, req.FromAccountId, req.Currency) {
 		return
 	}
-	if !server.AccountValidator(ctx,req.ToAccountId,req.Currency){
+	if !server.AccountValidator(ctx, req.ToAccountId, req.Currency) {
 		return
 	}
 
 	arg := Anuskh.TransferTxParams{
 		FromAccountID: req.FromAccountId,
-		ToAccountID: req.ToAccountId,
-		Amount: req.Amount,
+		ToAccountID:   req.ToAccountId,
+		Amount:        req.Amount,
 	}
-
 
 	account, err := server.store.TransferTx(ctx, arg)
 	if err != nil {
@@ -48,7 +47,7 @@ func (server *Server) CreateTransfer(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, account)
 }
 
-func (Server *Server) AccountValidator(ctx *gin.Context, accountID int64, currency string) bool{
+func (Server *Server) AccountValidator(ctx *gin.Context, accountID int64, currency string) bool {
 	account, err := Server.store.GetAccounts(context.Background(), accountID)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -59,8 +58,8 @@ func (Server *Server) AccountValidator(ctx *gin.Context, accountID int64, curren
 		return false
 	}
 	if account.Currency != currency {
-		err := fmt.Errorf("account %d's currency is mismatched : %s vs %s", accountID, currency, account.Currency)	
-		ctx.JSON(http.StatusBadRequest, errorResponse(err))	
+		err := fmt.Errorf("account %d's currency is mismatched : %s vs %s", accountID, currency, account.Currency)
+		ctx.JSON(http.StatusBadRequest, errorResponse(err))
 		return false
 	}
 	return true
